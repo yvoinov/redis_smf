@@ -1,0 +1,128 @@
+#!/sbin/sh
+
+#
+# Control Method for Redis (/lib/svc/method/init.redis)
+# Written by Yuri Voinov (C) 2024
+#
+# ident "@(#)redis.sh    1.0    11/07/24 YV"
+#
+
+. /lib/svc/share/smf_include.sh
+
+#############
+# Variables #
+#############
+
+# Base Redis installation directory
+BASE_DIR="/usr/local"
+
+# Redis files paths
+REDIS_PATH="$BASE_DIR""/bin"
+REDIS_CONF_PATH="/etc"
+
+# Redis files
+REDIS_BIN_FILE="redis-server"
+REDIS_CLI_FILE="redis-cli"
+REDIS_CONF_FILE="redis.conf"
+
+# Redis sock file
+REDIS_SOCK_PATH="/var/run"
+REDIS_SOCK_FILE="redis.sock"
+
+#
+# OS Commands location variables
+#
+CUT=`which cut`
+ECHO=`which echo`
+KILL=`which kill`
+PGREP=`which pgrep`
+UNAME=`which uname`
+
+# OS release
+OS_VER=`$UNAME -r|$CUT -f2 -d"."`
+OS_NAME=`$UNAME -s|$CUT -f1 -d" "`
+
+###############
+# Subroutines #
+###############
+
+check_redis ()
+{
+ # Check Redis installed
+ program=$1
+ if [ ! -f "$REDIS_PATH/$program" -a ! -x "$REDIS_PATH/$program" ]; then
+  $ECHO "ERROR: Redis not found!"
+  $ECHO "Exiting..."
+  exit 1
+ fi
+}
+
+check_os ()
+{
+ # Check OS version
+ if [ ! "$OS_NAME" = "SunOS" -a ! "$OS_VER" -lt "10" ]; then
+  $ECHO "ERROR: Unsupported OS $OS_NAME $OS_VER"
+  $ECHO "Exiting..."
+  exit 1
+ fi
+}
+
+checkconf ()
+{
+# Check Redis config file
+ config=$1
+ if [ -f "$REDIS_CONF_PATH"/"$config" ]; then
+  $ECHO "1"
+ else
+  $ECHO "0"
+ fi
+}
+
+startproc()
+{
+# Start Redis daemon
+ program=$1
+ if [ "`checkconf $REDIS_CONF_FILE`" != "1" ]; then
+  $ECHO "ERROR: Config file $REDIS_CONF_PATH/$REDIS_CONF_FILE not found."
+  $ECHO "Exiting..."
+  exit $SMF_EXIT_ERR_CONFIG
+ else
+  $REDIS_PATH/$program $REDIS_CONF_PATH/$REDIS_CONF_FILE
+ fi
+}
+
+stopproc()
+{
+# Stop Redis daemon
+ program=$1
+ $REDIS_PATH/$program -s $REDIS_SOCK_PATH/$REDIS_SOCK_FILE shutdown
+}
+
+##############
+# Main block #
+##############
+
+# Check ClamAV installed
+check_redis $REDIS_BIN_FILE
+
+# Check OS version
+check_os
+
+case "$1" in
+"restart")
+  stopproc $REDIS_CLI_FILE
+  startproc $REDIS_BIN_FILE
+  ;;
+"start")
+  startproc $REDIS_BIN_FILE
+  ;;
+"stop")
+  stopproc $REDIS_CLI_FILE
+  ;;
+*)
+  $ECHO "Usage: $0 { start | stop | restart }"
+  exit 1
+esac
+
+exit $SMF_EXIT_OK
+#

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<!--   Manifest-file for Redis, put this file in
+       /var/svc/manifest/site/redis.xml
+       and run #svccfg import /var/svc/manifest/site/redis.xml
+       Fixed by Yuri Voinov (C) 2024
+-->
+<service_bundle type='manifest' name='Redis'>
+
+<service
+        name='application/redis'
+        type='service'
+        version='1'>
+
+        <create_default_instance enabled='false' />
+
+        <single_instance />
+
+        <dependency name='fs-local'
+                grouping='require_all'
+                restart_on='none'
+                type='service'>
+                <service_fmri
+                        value='svc:/system/filesystem/local' />
+        </dependency>
+
+        <dependency name='utmp'
+                grouping='require_all'
+                restart_on='none'
+                type='service'>
+                <service_fmri value='svc:/system/utmp' />
+        </dependency>
+
+        <dependency name='clamav_config_data'
+                grouping='require_all'
+                restart_on='refresh'
+                type='path'>
+                <service_fmri value='file://localhost/etc/redis.conf' />
+        </dependency>
+
+        <exec_method
+                type='method'
+                name='start'
+                exec='/lib/svc/method/init.redis %m'
+                timeout_seconds='180'/>
+
+        <exec_method
+                type='method'
+                name='stop'
+                exec='/lib/svc/method/init.redis %m'
+                timeout_seconds='60' />
+
+        <exec_method
+                type='method'
+                name='restart'
+                exec='/lib/svc/method/init.redis %m'
+                timeout_seconds='360' />
+
+        <property_group name='general' type='framework'>
+                <!-- to start stop redis -->
+                <propval name='action_authorization' type='astring'
+                        value='solaris.smf.manage' />
+        </property_group>
+
+	<property_group name='startd' type='framework'>
+		<!-- sub-process core dumps shouldn't restart session -->
+		<propval name='ignore_error' type='astring'
+			value='core,signal' />
+        </property_group>
+
+        <stability value='Unstable' />
+
+        <template>
+                <common_name>
+                        <loctext xml:lang='C'>
+	                       Redis In-memory database
+                        </loctext>
+                </common_name>
+        </template>
+
+</service>
+
+</service_bundle>
