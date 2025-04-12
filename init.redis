@@ -2,9 +2,9 @@
 
 #
 # Control Method for Redis (/lib/svc/method/init.redis)
-# Written by Yuri Voinov (C) 2024
+# Written by Yuri Voinov (C) 2024-2025
 #
-# ident "@(#)redis.sh    1.0    11/07/24 YV"
+# ident "@(#)redis.sh    1.0    12/04/25 YV"
 #
 
 . /lib/svc/share/smf_include.sh
@@ -16,7 +16,7 @@
 # Base Redis installation directory
 BASE_DIR="/usr/local"
 
-# Redis files paths
+# Redis files paths  
 REDIS_PATH="$BASE_DIR""/bin"
 REDIS_CONF_PATH="/etc"
 
@@ -29,7 +29,7 @@ REDIS_CONF_FILE="redis.conf"
 REDIS_SOCK_PATH="/var/run"
 REDIS_SOCK_FILE="redis.sock"
 
-#
+#   
 # OS Commands location variables
 #
 CUT=`which cut`
@@ -75,15 +75,15 @@ checkconf ()
   $ECHO "1"
  else
   $ECHO "0"
- fi
+ fi  
 }
 
-startproc()
+startproc() 
 {
 # Start Redis daemon
  program=$1
  if [ "`checkconf $REDIS_CONF_FILE`" != "1" ]; then
-  $ECHO "ERROR: Config file $REDIS_CONF_PATH/$REDIS_CONF_FILE not found."
+  $ECHO "ERROR: Config file $REDIS_CONF_PATH/$REDIS_CONF_FILE not found."  
   $ECHO "Exiting..."
   exit $SMF_EXIT_ERR_CONFIG
  else
@@ -91,7 +91,7 @@ startproc()
  fi
 }
 
-stopproc()
+stopproc() 
 {
 # Stop Redis daemon
  program=$1

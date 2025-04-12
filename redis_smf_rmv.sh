@@ -2,10 +2,10 @@
 
 #
 # Redis SMF remove.
-# Yuri Voinov (C) 2024
+# Yuri Voinov (C) 2024-2025
 #
-# ident "@(#)redis_smf_rmv.sh    1.9    11/07/24 YV"
-#
+# ident "@(#)redis_smf_rmv.sh    1.9    12/04/25 YV"
+#   
 
 #############
 # Variables #
@@ -17,14 +17,14 @@ DAEMON_NAME="redis-server"
 DAEMON_CLI="redis-cli"
 SCRIPT_NAME="init.""$SERVICE_NAME"
 SMF_XML="$SERVICE_NAME"".xml"
-SMF_DIR="/var/svc/manifest"
+SMF_DIR="/var/svc/manifest/site"
 SVC_MTD="/lib/svc/method"
 CONF_DIR="/etc"
 CONF_FILE="redis.conf"
 SOCK_PATH="/var/run"
 SOCK_FILE="redis.sock"
 
-# OS utilities
+# OS utilities  
 AWK=`which awk`
 CUT=`which cut`
 ECHO=`which echo`
@@ -72,7 +72,7 @@ non_global_zones_r ()
 if [ "$ZONE" != "global" ]; then
  $ECHO  "================================================================="
  $ECHO  "This is NON GLOBAL zone $ZONE. To complete uninstallation please remove"
- $ECHO  "script $SCRIPT_NAME"
+ $ECHO  "script $SCRIPT_NAME" 
  $ECHO  "from $SVC_MTD"
  $ECHO  "in GLOBAL zone manually AFTER uninstalling autostart."
  $ECHO  "================================================================="
@@ -129,21 +129,21 @@ else
  exit 1
 fi
 
-# Check for non-global zones uninstallation
+# Check for non-global zones uninstallation   
 non_global_zones_r
 
 $ECHO "Verify $PROGRAM_NAME SMF uninstallation..."
 
-# Check uninstallation
+# Check uninstallation  
 $SVCS $SERVICE_NAME>/dev/null 2>&1
 
 retcode=`$ECHO $?`
 case "$retcode" in
- 0)
+ 0) 
   $ECHO "*** $PROGRAM_NAME SMF service uninstallation process has errors"
-  exit 1
+  exit 1 
  ;;
- *)
+ *) 
   $ECHO "*** $PROGRAM_NAME SMF service uninstallation successfuly"
  ;;
 esac

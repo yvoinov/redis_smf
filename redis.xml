@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
 <!--   Manifest-file for Redis, put this file in
-       /var/svc/manifest/site/redis.xml
+       /var/svc/manifest/site/redis.xml 
        and run #svccfg import /var/svc/manifest/site/redis.xml
-       Fixed by Yuri Voinov (C) 2024
+       Fixed by Yuri Voinov (C) 2024-2025
 -->
 <service_bundle type='manifest' name='Redis'>
 
@@ -62,11 +62,11 @@
                         value='solaris.smf.manage' />
         </property_group>
 
-	<property_group name='startd' type='framework'>
-		<!-- sub-process core dumps shouldn't restart session -->
-		<propval name='ignore_error' type='astring'
-			value='core,signal' />
-        </property_group>
+	<property_group name='startd' type='framework'> 
+		<!-- sub-process core dumps shouldn't restart session --> 
+		<propval name='ignore_error' type='astring' 
+			value='core,signal' /> 
+        </property_group> 
 
         <stability value='Unstable' />
 

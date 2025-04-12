@@ -1,5 +1,5 @@
 ============================================================
-Redis SMF Installation & Remove         (C) 2024 Yuri Voinov
+Redis SMF Installation & Remove    (C) 2024-2025 Yuri Voinov
 ============================================================
 
 Solaris   Redis   из  opencsw.org.  Рассчитан  на  локальную
@@ -9,5 +9,5 @@ Solaris   Redis   из  opencsw.org.  Рассчитан  на  локальную
 адаптированный для версии OpenCSW.
 
 ============================================================
-Redis SMF Installation & Remove         (C) 2024 Yuri Voinov
+Redis SMF Installation & Remove    (C) 2024-2025 Yuri Voinov
 ============================================================

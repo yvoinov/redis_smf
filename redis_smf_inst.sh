@@ -2,9 +2,9 @@
 
 #
 # Redis SMF installation.
-# Yuri Voinov (C) 2024
+# Yuri Voinov (C) 2024-2025
 #
-# ident "@(#)redis_smf_inst.sh    1.9    11/07/24 YV"
+# ident "@(#)redis_smf_inst.sh    1.9    12/04/25 YV"
 #
 
 #############
@@ -15,7 +15,7 @@ PROGRAM_NAME="Redis"
 SERVICE_NAME="redis"
 SCRIPT_NAME="init.""$SERVICE_NAME"
 SMF_XML="$SERVICE_NAME"".xml"
-SMF_DIR="/var/svc/manifest"
+SMF_DIR="/var/svc/manifest/site"
 SVC_MTD="/lib/svc/method"
 CONF_DIR="/etc"
 CONF_FILE="redis.conf"
@@ -68,7 +68,7 @@ non_global_zones ()
 if [ "$ZONE" != "global" ]; then
  $ECHO "=============================================================="
  $ECHO "This is NON GLOBAL zone $ZONE. To complete installation please copy"
- $ECHO "script $SCRIPT_NAME"
+ $ECHO "script $SCRIPT_NAME" 
  $ECHO "to $SVC_MTD"
  $ECHO "in GLOBAL zone manually BEFORE starting service by SMF."
  $ECHO "Note: Permissions on $SCRIPT_NAME must be set to root:sys."
@@ -133,7 +133,7 @@ else
  exit 1
 fi
 
-# Check for non-global zones installation
+# Check for non-global zones installation   
 non_global_zones
 
 $ECHO "If $PROGRAM_NAME services installed correctly, enable and start it now"
